@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Ben's Job Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#F8F6F1; --surface:#FFFFFF; --ink:#24201A; --ink-soft:#655D50; --ink-faint:#938A7C;
+  --line:#E8E2D6; --line-soft:#F1ECE3;
+  --accent:#9A560A; --accent-deep:#7A4306; --accent-wash:#FBEFD9;
+  --fd-txt:#0F6E6A; --fd-bg:#D7F0EE;
+  --hy-txt:#1D4ED8; --hy-bg:#E2EBFD;
+  --re-txt:#12693A; --re-bg:#D9F2E2;
+  --of-txt:#92600A; --of-bg:#FBEFD4;
+  --rc-txt:#5B3B9E; --rc-bg:#ECE6FA;
+  --old-txt:#8A4B12; --old-bg:#FBE9D9;
+  --star:#D99A1E;
+  --shadow:0 1px 2px rgba(36,32,26,.05);
+  --display:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;
+  --body:'Inter',ui-sans-serif,system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#15130F; --surface:#1E1B16; --ink:#F3EFE7; --ink-soft:#B8AE9E; --ink-faint:#877E70;
+  --line:#322D25; --line-soft:#27231D;
+  --accent:#F0A845; --accent-deep:#F7C170; --accent-wash:#3A2A12;
+  --fd-txt:#7ED8D2; --fd-bg:#143331; --on-accent:#1E1B16;
+  --hy-txt:#9DBBFB; --hy-bg:#1E2A47; --re-txt:#84DBA6; --re-bg:#163325;
+  --of-txt:#EFC46D; --of-bg:#3A2D12; --rc-txt:#C4B1F4; --rc-bg:#2B2245;
+  --old-txt:#F0B07A; --old-bg:#3B2516; --star:#F2C14E; --shadow:none;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#15130F; --surface:#1E1B16; --ink:#F3EFE7; --ink-soft:#B8AE9E; --ink-faint:#877E70;
+  --line:#322D25; --line-soft:#27231D;
+  --accent:#F0A845; --accent-deep:#F7C170; --accent-wash:#3A2A12;
+  --fd-txt:#7ED8D2; --fd-bg:#143331; --on-accent:#1E1B16;
+  --hy-txt:#9DBBFB; --hy-bg:#1E2A47; --re-txt:#84DBA6; --re-bg:#163325;
+  --of-txt:#EFC46D; --of-bg:#3A2D12; --rc-txt:#C4B1F4; --rc-bg:#2B2245;
+  --old-txt:#F0B07A; --old-bg:#3B2516; --star:#F2C14E; --shadow:none;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.5;margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:28px 56px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px}
+.eyebrow{font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:600;font-size:32px;line-height:1.1;margin:6px 0 6px;letter-spacing:-.01em;text-wrap:balance}
+.sub{color:var(--ink-soft);margin:0;max-width:62ch}
+.stamp{font-size:12.5px;color:var(--ink-soft);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;white-space:nowrap}
+.stamp b{color:var(--ink);font-weight:600}
+
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.stat{flex:1 1 140px;min-width:0;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);font:inherit;color:inherit;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.stat:hover{border-color:var(--ink-faint)}
+.stat[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.stat .n{font-family:var(--display);font-weight:600;font-size:30px;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.stat .l{margin-top:8px;font-size:12px;font-weight:500;color:var(--ink-soft)}
+.stat.plain .n{color:var(--ink)}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px}
+.search{flex:1 1 240px;min-width:0;position:relative}
+.search input{width:100%;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px 10px 36px}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--ink-faint)}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{font:inherit;font-size:13px;font-weight:500;color:var(--ink-soft);background:none;border:0;border-radius:7px;padding:6px 11px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent-wash);color:var(--accent-deep)}
+.chk{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft);cursor:pointer;user-select:none}
+.chk input{accent-color:var(--accent);width:15px;height:15px}
+
+section.roles{margin-top:30px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px}
+.sec-head h2{font-family:var(--display);font-weight:600;font-size:21px;margin:0;display:flex;align-items:baseline;gap:10px}
+.sec-head .tag{font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint)}
+.sec-head .count{font-size:13px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.list{display:grid;gap:8px;margin-top:12px}
+.empty{color:var(--ink-faint);font-size:13px;padding:18px 4px}
+
+.role{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:14px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.role.starred{border-color:color-mix(in srgb,var(--star) 55%,var(--line))}
+.logo{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.02em}
+.agency{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;font-size:13px;color:var(--ink-soft)}
+.agency b{color:var(--ink);font-weight:600;font-size:13.5px}
+.type{font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--ink-faint);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.title{font-family:var(--display);font-weight:600;font-size:16.5px;line-height:1.3;margin:3px 0 7px;text-wrap:balance}
+.title a{color:var(--ink);text-decoration:none}
+.title a:hover{color:var(--accent);text-decoration:underline}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:13px;color:var(--ink-soft)}
+.meta .money{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:99px;background:currentColor;opacity:.8}
+.pill.Hybrid{color:var(--hy-txt);background:var(--hy-bg)}
+.pill.Remote{color:var(--re-txt);background:var(--re-bg)}
+.pill.Office{color:var(--of-txt);background:var(--of-bg)}
+.pill.Field{color:var(--fd-txt);background:var(--fd-bg)}
+.pill.rec{color:var(--rc-txt);background:var(--rc-bg)}
+.pill.old{color:var(--old-txt);background:var(--old-bg)}
+.pill.closing{color:var(--on-accent,#fff);background:var(--accent)}
+.note{margin:8px 0 0;font-size:13px;color:var(--ink-soft);max-width:72ch}
+.side{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.posted{font-size:12px;color:var(--ink-faint);white-space:nowrap;font-variant-numeric:tabular-nums}
+.btns{display:flex;gap:6px}
+.go{font:inherit;font-size:13px;font-weight:600;text-decoration:none;color:var(--on-accent,#fff);background:var(--accent);border-radius:9px;padding:7px 12px;white-space:nowrap}
+.go:hover{background:var(--accent-deep)}
+.starbtn{font:inherit;background:var(--surface);border:1px solid var(--line);border-radius:9px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-faint)}
+.starbtn[aria-pressed="true"]{color:var(--star);border-color:var(--star)}
+.src{font-size:11.5px;color:var(--ink-faint)}
+
+details.screened{margin-top:36px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 18px}
+details.screened summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;font-family:var(--display);font-weight:600;font-size:17px}
+details.screened summary::-webkit-details-marker{display:none}
+details.screened summary .hint{font-family:var(--body);font-weight:500;font-size:12.5px;color:var(--ink-soft)}
+.groups{display:grid;gap:18px;padding:4px 0 18px}
+.group h3{margin:0 0 4px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.group p{margin:0 0 8px;font-size:12.5px;color:var(--ink-faint)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:var(--ink);text-decoration:none;background:var(--bg)}
+a.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip small{color:var(--ink-faint);margin-left:4px}
+
+footer{margin-top:26px;font-size:12.5px;color:var(--ink-faint);display:grid;gap:6px;max-width:80ch}
+
+@media (max-width:640px){
+  h1{font-size:27px}
+  .role{grid-template-columns:36px minmax(0,1fr);gap:12px}
+  .logo{width:36px;height:36px;font-size:13px}
+  .side{grid-column:1 / -1;flex-direction:row;align-items:center;justify-content:space-between}
+  .stat{flex:1 1 calc(50% - 5px)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Sales, account management &amp; buying · Bristol</div>
+      <h1>Ben's Job Board</h1>
+      <p class="sub">Sales roles in food and drink, buyer roles on the client side of food supply, and account manager roles in other industries. Every role is based within about 40 minutes of Bristol, or is a field role run from a base in that area.</p>
+    </div>
+    <div class="stamp">Jobs screened <b>25 Oct 2026</b></div>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="toolbar">
+    <label class="search" for="q">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search company, product, town, salary…" autocomplete="off">
+    </label>
+    <div class="seg" role="group" aria-label="Working pattern" id="modeSeg">
+      <button type="button" data-mode="all" aria-pressed="true">All</button>
+      <button type="button" data-mode="Field">Field</button>
+      <button type="button" data-mode="Hybrid">Hybrid</button>
+      <button type="button" data-mode="Office">Office</button>
+    </div>
+    <div class="seg" role="group" aria-label="Source" id="srcSeg">
+      <button type="button" data-src="all" aria-pressed="true">All sources</button>
+      <button type="button" data-src="direct">Employer direct</button>
+      <button type="button" data-src="recruiter">Via recruiter</button>
+    </div>
+    <label class="chk" for="hideOld"><input type="checkbox" id="hideOld"> Hide listings over 6 weeks old</label>
+  </div>
+
+  <section class="roles" aria-labelledby="h-food">
+    <div class="sec-head">
+      <h2 id="h-food"><span class="tag">Section 1</span> Sales roles in food &amp; drink supply</h2>
+      <span class="count" id="c-food"></span>
+    </div>
+    <div class="list" id="l-food"></div>
+  </section>
+
+  <section class="roles" aria-labelledby="h-buyer">
+    <div class="sec-head">
+      <h2 id="h-buyer"><span class="tag">Section 2</span> Buyer roles: the client side of food supply</h2>
+      <span class="count" id="c-buyer"></span>
+    </div>
+    <div class="list" id="l-buyer"></div>
+  </section>
+
+  <section class="roles" aria-labelledby="h-other">
+    <div class="sec-head">
+      <h2 id="h-other"><span class="tag">Section 3</span> Sales &amp; account manager roles in other industries</h2>
+      <span class="count" id="c-other"></span>
+    </div>
+    <div class="list" id="l-other"></div>
+  </section>
+
+  <details class="screened" id="screened">
+    <summary>Food &amp; drink employers screened <span class="hint" id="screenHint"></span></summary>
+    <div class="groups" id="groups"></div>
+  </details>
+
+  <footer>
+    <div>Roles come from Reed and LinkedIn searches within 20–25 miles of Bristol, screened on 25 Oct 2026. Each listing was read in full and checked to be still open. Salaries are shown only where the advert states one.</div>
+    <div>Left out: commission-only, door-to-door, cold-calling telesales and SDR roles; jobs inside recruitment agencies; trainee and graduate schemes; and roles whose office is London or further than about 40 minutes from Bristol.</div>
+    <div>Field roles can cover a patch anywhere, as long as the base is near Bristol. Recruiter listings often don't name the employer, so apply through the recruiter to find out who it is.</div>
+    <div>Starred roles are saved in this browser only.</div>
+  </footer>
+</div>
+
+<script>
+const TODAY = new Date("2026-10-25T12:00:00");
+
+const ROLES = [
+  /* ---------------- Section 1: food & drink sales ---------------- */
+  { s:"food", co:"JJ Foodservice", type:"Foodservice wholesale", title:"Business Development Manager", loc:"Bristol", mode:"Field", modeNote:"Field-based from the Bristol branch", pay:"Up to £40,000 + OTE bonus", posted:"2026-09-29", src:"direct",
+    note:"Win new high-profile catering and restaurant customers for a £243m foodservice wholesaler. Asks for proven new-business experience and a love of food.",
+    url:"https://uk.linkedin.com/jobs/view/4471943559" },
+  { s:"food", co:"Froneri", type:"Ice cream", title:"Area Business Manager – Field Sales (South)", loc:"Bristol, Bath, Somerset, Dorset", mode:"Field", modeNote:"BS, BA, TA, DT and BH patch", pay:"Salary + car", posted:"2026-10-19", src:"direct",
+    note:"Own an area for the maker of Nestlé and Häagen-Dazs ice cream, taking its brands into more convenience and out-of-home outlets.",
+    url:"https://uk.linkedin.com/jobs/view/4480265027" },
+  { s:"food", co:"Sazerac", type:"Spirits", title:"Business Development Manager, Off-Trade (Bristol)", loc:"Bristol", mode:"Field", modeNote:"Bristol territory", pay:"", posted:"2026-10-08", src:"direct",
+    note:"Build a call file of convenience stores and independent retailers, sell the Sazerac spirits range, and place point-of-sale material.",
+    url:"https://uk.linkedin.com/jobs/view/4466216457" },
+  { s:"food", co:"Tiny Rebel", type:"Brewery", title:"Senior National Account Manager – Off Trade", loc:"Newport (about 35 min)", mode:"Office", modeNote:"Newport brewery; pattern not stated", pay:"", posted:"2026-10-17", src:"direct",
+    note:"Senior role leading the brewery's grocery and national retail strategy: listings, pricing, promotions and joint business plans with major customers.",
+    url:"https://uk.linkedin.com/jobs/view/4479641426" },
+  { s:"food", co:"Carlsberg Britvic", rec:"McCurrach", type:"Beer & soft drinks", title:"Customer Development Executive", loc:"Bath, Bristol & surrounding area", mode:"Field", modeNote:"Ideal home postcode BA1", pay:"£30,000 + 20% bonus", posted:"2026-10-22", src:"recruiter",
+    note:"Grow Carlsberg Britvic's share across your outlets with a territory plan and category selling. McCurrach is an outsourced sales agency. The same role is also listed by Avidity Careers.",
+    url:"https://uk.linkedin.com/jobs/view/4480008457" },
+  { s:"food", co:"Diageo", rec:"CPM UK", type:"Spirits & beer", title:"Sales Executive (On-Trade)", loc:"Bristol (BS32), Weston-super-Mare", mode:"Field", modeNote:"Bristol & Weston patch", pay:"£27,594 + £3,000 bonus + car", posted:"2026-10-15", src:"recruiter",
+    note:"Visit pubs and bars to sell Smirnoff, Guinness and Gordon's. CPM is an outsourced sales agency working for Diageo.",
+    url:"https://uk.linkedin.com/jobs/view/4480157828" },
+  { s:"food", co:"Vitamin Well Group", type:"Functional drinks & snacks", title:"Field Sales Executive – South West (Barebells, NOCCO, Vitamin Well)", loc:"Bristol & South West", mode:"Field", modeNote:"Own area from day one", pay:"", posted:"2026-10-07", src:"direct",
+    note:"Build distribution in Spar, Londis, Premier and similar convenience stores for fast-growing drinks and protein-bar brands.",
+    url:"https://uk.linkedin.com/jobs/view/4466524144" },
+  { s:"food", co:"Monster Energy", rec:"The Advocate Group", type:"Energy drinks", title:"Field Account Executive – Grocery (South West)", loc:"Greater Bristol", mode:"Field", modeNote:"South West grocery patch", pay:"", posted:"2026-10-20", src:"recruiter",
+    note:"Turn national head-office deals into store-level growth across Tesco, Asda, Sainsbury's and Morrisons, working with area managers and regional buyers.",
+    url:"https://uk.linkedin.com/jobs/view/4469910838" },
+  { s:"food", co:"Monster Energy", rec:"The Advocate Group", type:"Energy drinks", title:"Trade Development Manager", loc:"Greater Bristol", mode:"Field", modeNote:"Own territory", pay:"", posted:"2026-10-09", src:"recruiter",
+    note:"High-activity field role making Monster unmissable across your territory, focused on display space and distribution rather than just taking orders.",
+    url:"https://uk.linkedin.com/jobs/view/4476293737" },
+  { s:"food", co:"Major FMCG brand", rec:"The Advocate Group", type:"Convenience FMCG", title:"Field Sales Representative – West of England", loc:"Bristol, Bath & Gloucester", mode:"Field", modeNote:"Must live on patch", pay:"£30,000 + 25% quarterly bonus + car", posted:"2026-10-09", src:"recruiter",
+    note:"Run your own patch of independent convenience stores for an expanding FMCG brand. The recruiter doesn't name the brand.",
+    url:"https://uk.linkedin.com/jobs/view/4476298745" },
+  { s:"food", co:"Swedish fitness FMCG brand", rec:"PIE Recruitment", type:"Health drinks & snacks", title:"Regional Sales Executive – Fitness Brand", loc:"Bath / Bristol", mode:"Field", modeNote:"Home-based", pay:"£30,000–£32,000 + £6,000 bonus + car", posted:"2026-10-06", src:"recruiter",
+    note:"Look after customers around Bristol for a global health-and-wellness FMCG business. It may be the same company as the Vitamin Well role above.",
+    url:"https://uk.linkedin.com/jobs/view/4474027966" },
+  { s:"food", co:"National drinks business", rec:"COREcruitment", type:"Drinks", title:"National Key Account Manager", loc:"Bristol", mode:"Field", modeNote:"Large territory", pay:"Up to £55,000 + package", posted:"2026-09-29", src:"recruiter",
+    note:"Own and grow national accounts for a business that supplies drinks to companies across the UK.",
+    url:"https://uk.linkedin.com/jobs/view/4473273626" },
+  { s:"food", co:"Food & drink manufacturer", rec:"MacGregor Black", type:"Food manufacturing", title:"Senior National Account Manager", loc:"Bristol", mode:"Hybrid", modeNote:"2–3 days a week on site, plus customer visits", pay:"£65,000–£75,000 + bonus + car allowance", posted:"2026-10-14", src:"recruiter",
+    note:"A step up: grow major retail and branded accounts, lead complex negotiations and coach junior account managers.",
+    url:"https://uk.linkedin.com/jobs/view/4476684508" },
+  { s:"food", co:"International food company", rec:"Norrie Johnston", type:"Grocery", title:"Commercial Manager – Grocery Growth", loc:"UK-wide (listed under Bath)", mode:"Field", modeNote:"Home-based, with customer and head-office visits", pay:"£65,000 + car allowance + bonus", posted:"2026-10-13", src:"recruiter",
+    note:"Help build a new UK grocery business for an established food company, potentially including own-label products.",
+    url:"https://www.reed.co.uk/jobs/commercial-manager/57452894" },
+  { s:"food", co:"Food business", rec:"The Advocate Group", type:"Food manufacturing", title:"Senior Category Manager", loc:"Greater Bristol", mode:"Hybrid", modeNote:"Commercial team; pattern not stated", pay:"", posted:"2026-09-25", src:"recruiter",
+    note:"Supplier-side category role: use shopper insight to influence grocery buyers. A good bridge between sales and buying.",
+    url:"https://uk.linkedin.com/jobs/view/4470328404" },
+
+  /* ---------------- Section 2: buyer roles ---------------- */
+  { s:"buyer", co:"Matthew Clark Bibendum (C&C Group)", type:"Drinks wholesale", title:"Buyer – Spirits & Soft Drinks (15-month contract)", loc:"Bristol (or London / Glasgow)", mode:"Hybrid", modeNote:"2 days a week on site", pay:"", posted:"2026-10-23", src:"direct",
+    note:"Choose the range and negotiate terms for spirits and soft drinks at one of the UK's largest drinks wholesalers. Bristol is its head office. Fixed-term contract.",
+    url:"https://careers.candcgroupplc.com/vacancies/7636/buyer_spirits_soft_drinks_15_month_ftc/" },
+  { s:"buyer", co:"Pet Drugs Online (IVC Evidensia)", type:"Pet food retail", title:"Category / Buying Manager – Pet Food", loc:"Keynsham / Bristol", mode:"Hybrid", modeNote:"Hybrid", pay:"", posted:"2026-10-21", src:"direct",
+    note:"Run the pet food category end to end: range, pricing, promotions and supplier terms. This is the buyer's side of the conversations Ben has now.",
+    url:"https://uk.linkedin.com/jobs/view/4477596122" },
+  { s:"buyer", co:"ADM Agriculture", type:"Grain & agri supply", title:"Farm Trader", loc:"South of England (listed Bristol)", mode:"Field", modeNote:"Location flexible across the South", pay:"", posted:"2026-10-18", src:"direct",
+    note:"Buy grain, oilseeds and pulses from farmers and sell them seed and fertiliser. Both buying and account management, at the very start of the food chain.",
+    url:"https://uk.linkedin.com/jobs/view/4425633637" },
+
+  /* ---------------- Section 3: other industries ---------------- */
+  { s:"other", co:"Toyota Material Handling", type:"Forklifts & warehouse", title:"Territory Sales Executive", loc:"Bristol", mode:"Field", modeNote:"Bristol territory", pay:"Salary + commission", posted:"2026-10-25", src:"direct",
+    note:"B2B field sales of forklifts and warehouse trucks to businesses across Bristol. Food distributors and warehouses are natural customers.",
+    url:"https://uk.linkedin.com/jobs/view/4483374198" },
+  { s:"other", co:"NWF Fuels", type:"Fuel distribution", title:"Regional Key Account Executive", loc:"Yate", mode:"Field", modeNote:"Regional key accounts", pay:"Up to £40,000 + up to 10% bonus", posted:"2026-10-25", src:"direct",
+    note:"Look after the region's biggest commercial and buying-group accounts face to face. Very close to Ben's current mix of servicing and growing accounts.",
+    url:"https://uk.linkedin.com/jobs/view/4483380269" },
+  { s:"other", co:"Otis", type:"Lifts & escalators", title:"Account Manager – South West", loc:"Aztec West, Almondsbury", mode:"Field", modeNote:"Bristol, Devon & Cornwall", pay:"Salary + commission + car", posted:"2026-10-21", src:"direct",
+    note:"Relationship-led role building long-term customer partnerships for lift service and modernisation contracts.",
+    url:"https://uk.linkedin.com/jobs/view/4481153343" },
+  { s:"other", co:"Mitsubishi Electric", type:"Heating & air con", title:"Contractor Account Manager", loc:"Bristol", mode:"Hybrid", modeNote:"Home or hybrid options", pay:"", posted:"2026-10-21", src:"direct",
+    note:"Build value-adding relationships with installer and contractor accounts.",
+    url:"https://uk.linkedin.com/jobs/view/4482081055" },
+  { s:"other", co:"Yell", type:"Digital marketing", title:"Senior Account Manager – Bristol / South Wales", loc:"Bristol & South Wales", mode:"Field", modeNote:"Must live on patch", pay:"", posted:"2026-10-23", src:"direct",
+    note:"Look after a portfolio of local business clients worth about £1m a year and win new high-value business.",
+    url:"https://uk.linkedin.com/jobs/view/4480665345" },
+  { s:"other", co:"Calor Gas", type:"Energy", title:"Business Development Executive", loc:"Bristol, Bath, South Wales & Gloucestershire", mode:"Field", modeNote:"Territory-based", pay:"Up to £34,000 + £2,000 quarterly bonus", posted:"2026-10-20", src:"direct",
+    note:"Grow relationships with partners and retailers across the patch. Needs 3 years or more in field sales or account management.",
+    url:"https://uk.linkedin.com/jobs/view/4481768635" },
+  { s:"other", co:"City Plumbing", type:"Trade merchant", title:"Territory Sales Manager", loc:"Bristol", mode:"Field", modeNote:"Bristol territory", pay:"£50,000", posted:"2026-10-20", src:"direct",
+    note:"Win new trade accounts and grow existing ones, with joint calls alongside supplier reps.",
+    url:"https://www.reed.co.uk/jobs/territory-sales-manager/57475242" },
+  { s:"other", co:"B&Q", type:"Retail / trade", title:"Trade Business Development Manager", loc:"Cribbs Causeway", mode:"Office", modeNote:"Store-based with trade visits", pay:"£36,200–£46,300 + up to 20% bonus", posted:"2026-10-14", src:"direct",
+    note:"Find and grow high-value trade customers for the Cribbs Causeway store, owning each relationship end to end.",
+    url:"https://uk.linkedin.com/jobs/view/4462150270" },
+  { s:"other", co:"Hilti", type:"Construction", title:"Specialist Field Sales Account Manager – Building Envelope", loc:"South West (Bristol, Swindon, South Coast)", mode:"Field", modeNote:"Site and customer visits Mon–Fri", pay:"Salary + uncapped bonus", posted:"2026-10-12", src:"direct",
+    note:"Grow façade, roofing and fire-protection business with new and existing customers. Known for strong sales training.",
+    url:"https://uk.linkedin.com/jobs/view/4476027198" },
+  { s:"other", co:"Saint-Gobain", type:"Construction chemicals", title:"Area Sales Manager – Infrastructure", loc:"Greater Bristol", mode:"Field", modeNote:"Regional", pay:"", posted:"2026-10-08", src:"direct",
+    note:"Work with stockists, contractors and applicators to grow volume across the region.",
+    url:"https://uk.linkedin.com/jobs/view/4474821708" },
+  { s:"other", co:"Videojet Technologies", type:"Packaging coding", title:"Sales Account Manager (South West)", loc:"Bristol & South West", mode:"Field", modeNote:"Home base, travel across patch", pay:"", posted:"2026-10-03", src:"direct",
+    note:"Sell coding and marking printers to manufacturers, many of them food and drink producers, so Ben's food contacts would carry over. Split between new and existing customers.",
+    url:"https://uk.linkedin.com/jobs/view/4466349099" },
+  { s:"other", co:"Antalis", type:"Packaging", title:"Business Development Manager – Packaging", loc:"Severn Beach", mode:"Field", modeNote:"South region", pay:"", posted:"2026-10-08", src:"direct",
+    note:"Grow accounts and win new business for the packaging division of a large paper and packaging distributor.",
+    url:"https://www.reed.co.uk/jobs/business-development-manager/57435338" },
+  { s:"other", co:"Dawsongroup", type:"Equipment rental", title:"Business Development Manager – Temperature Control", loc:"Avonmouth", mode:"Field", modeNote:"Allocated territory", pay:"", posted:"2026-10-14", src:"direct",
+    note:"Rents chillers and cooling equipment, which food producers use heavily. Values transferable skills.",
+    url:"https://uk.linkedin.com/jobs/view/4445921975" },
+  { s:"other", co:"Brenntag", type:"Chemical & ingredient distribution", title:"Sales Manager (Bristol & Swansea)", loc:"Bristol", mode:"Office", modeNote:"Covers two sites", pay:"", posted:"2026-10-24", src:"direct",
+    note:"A step up: manage 3 internal and 3 external account managers selling about £5m a year in gross profit.",
+    url:"https://uk.linkedin.com/jobs/view/4456747069" },
+  { s:"other", co:"LKQ Euro Car Parts", type:"Automotive parts", title:"Regional Account Manager – Bodyshop", loc:"Bristol", mode:"Field", modeNote:"Leads a field team", pay:"", posted:"2026-10-09", src:"direct",
+    note:"Lead and coach a team of field-based account managers serving bodyshop customers.",
+    url:"https://uk.linkedin.com/jobs/view/4450264176" },
+  { s:"other", co:"MSX International", type:"Automotive parts", title:"Trade Client Manager – South West England", loc:"Bath", mode:"Field", modeNote:"South West", pay:"", posted:"2026-10-07", src:"direct",
+    note:"Field-based business development for genuine trade parts, working with a network of car dealers.",
+    url:"https://uk.linkedin.com/jobs/view/4476761791" },
+  { s:"other", co:"Howdens", type:"Trade kitchens", title:"Territory Sales Representative", loc:"Chepstow (about 30 min)", mode:"Field", modeNote:"Depot territory", pay:"Salary + bonuses", posted:"2026-10-13", src:"direct",
+    note:"Build and grow the trade customer base for the local depot.",
+    url:"https://uk.linkedin.com/jobs/view/4479038823" },
+  { s:"other", co:"Kuehne+Nagel", type:"Logistics", title:"Sea Logistics Sales Representative", loc:"Bristol", mode:"Field", modeNote:"Bristol", pay:"", posted:"2026-10-03", src:"direct",
+    note:"Win and grow freight-forwarding customers through solution selling.",
+    url:"https://uk.linkedin.com/jobs/view/4447060081" },
+  { s:"other", co:"Europa Worldwide Group", type:"Logistics", title:"Senior Business Development Manager", loc:"Bristol branch", mode:"Hybrid", modeNote:"Hybrid", pay:"Salary + car allowance + bonus", posted:"2026-10-14", src:"direct",
+    note:"Find and win new air and sea freight customers for an independent logistics firm.",
+    url:"https://uk.linkedin.com/jobs/view/4468227291" },
+  { s:"other", co:"Abbey Hotel Bath (Axiom)", type:"Hospitality", title:"Sales Manager", loc:"Bath", mode:"Office", modeNote:"Hotel-based", pay:"£35,000", posted:"2026-10-05", src:"direct",
+    note:"Drive rooms, meetings and events revenue through corporate account management for a Marriott-collection hotel.",
+    url:"https://uk.linkedin.com/jobs/view/4473652103" },
+  { s:"other", co:"Frontline", type:"Retail displays", title:"Account Manager – 3D Retail", loc:"Bath", mode:"Hybrid", modeNote:"Hybrid after probation", pay:"£33,000–£37,000", posted:"2026-10-12", src:"direct",
+    note:"Agency that designs in-store displays for brands, many of them FMCG. Client-side project and account management.",
+    url:"https://www.reed.co.uk/jobs/account-manager-3d-retail/57448536" },
+  { s:"other", co:"Industrial equipment manufacturer", rec:"Talent Guardian", type:"Food manufacturing equipment", title:"Regional Sales Manager", loc:"M4 corridor, Reading to Bristol", mode:"Field", modeNote:"Home-based", pay:"£40,000–£55,000", posted:"2026-10-14", src:"recruiter",
+    note:"Sell equipment and services to food production sites. Ben's knowledge of food manufacturing would count here.",
+    url:"https://www.reed.co.uk/jobs/regional-sales-manager/57456549" },
+  { s:"other", co:"European packaging-machinery maker", rec:"Wallace Hind Selection", type:"Food & drink packaging lines", title:"Business Development Manager (UK launch)", loc:"UK, home-based", mode:"Field", modeNote:"Central UK preferred; Bristol listed", pay:"Up to £75,000 + bonus + car", posted:"2026-10-20", src:"recruiter",
+    note:"Set up the UK sales office from scratch, selling packaging lines to the food and drink sector. Needs a strong new-business record.",
+    url:"https://www.reed.co.uk/jobs/business-development-manager/57475466" },
+  { s:"other", co:"Commercial coffee equipment group", rec:"BMS Performance", type:"Coffee machines", title:"National Business Development Manager", loc:"UK, field-based (listed Bristol)", mode:"Field", modeNote:"National patch", pay:"£60,000–£70,000 + bonus + car", posted:"2026-10-06", src:"recruiter",
+    note:"Sell bean-to-cup machines to coffee chains, hotel groups, restaurants and contract caterers, the customers Ben already knows.",
+    url:"https://uk.linkedin.com/jobs/view/4474976522" },
+  { s:"other", co:"Beauty & personal care brand", rec:"Moxie and Mettle", type:"FMCG (beauty)", title:"FMCG Account Manager", loc:"Bristol / UK", mode:"Hybrid", modeNote:"South West office once or twice a month", pay:"£40,000–£45,000 + £15,000 bonus", posted:"2026-09-14", src:"recruiter",
+    note:"Win new retail listings for a growing beauty brand. The same grocery-style account management, in a different category.",
+    url:"https://www.reed.co.uk/jobs/fmcg-account-manager/57342164" },
+  { s:"other", co:"Energy solutions business", rec:"Chase and Holland", type:"Energy", title:"Key Account Manager", loc:"Bristol & South West", mode:"Field", modeNote:"Regional territory", pay:"£40,000 + commission", posted:"2026-09-16", src:"recruiter",
+    note:"Win new business and develop long-term customer relationships across a regional territory.",
+    url:"https://www.reed.co.uk/jobs/key-account-manager/57355293" },
+  { s:"other", co:"Undisclosed", rec:"Elevation Recruitment Group", type:"B2B services", title:"Business Account Manager – Bristol / South Wales", loc:"Bristol", mode:"Field", modeNote:"External account manager", pay:"£45,000 + bonus + car", posted:"2026-10-05", src:"recruiter",
+    note:"Manage and grow an existing book of business accounts. A pure relationship-management role.",
+    url:"https://www.reed.co.uk/jobs/business-account-manager-bristol-south-wales/57421266" },
+  { s:"other", co:"Building materials supplier", rec:"GCS Associates", type:"Building materials", title:"Business Development Manager / Area Sales Manager", loc:"South West England", mode:"Field", modeNote:"External role", pay:"£45,000–£50,000 + bonus + car", posted:"2026-09-30", src:"recruiter",
+    note:"Open to people whose sales experience is from another sector.",
+    url:"https://www.reed.co.uk/jobs/business-development-manager/57408259" },
+  { s:"other", co:"Window & PVC-U manufacturer", rec:"Rise Technical Recruitment", type:"Building materials", title:"Area Sales Manager – Building Materials", loc:"South West, home-based", mode:"Field", modeNote:"Home-based from Bristol area", pay:"£40,000–£55,620 + commission + car allowance", posted:"2026-09-17", src:"recruiter",
+    note:"Sell to commercial clients across the South West, with account management alongside new business.",
+    url:"https://www.reed.co.uk/jobs/area-sales-manager-building-materials/57359265" },
+  { s:"other", co:"Technical products company", rec:"Rise Technical Recruitment", type:"Technical sales", title:"Regional Business Development Manager", loc:"South West", mode:"Field", modeNote:"Home and customer visits", pay:"£50,000–£60,000 + uncapped bonus + car", posted:"2026-09-25", src:"recruiter",
+    note:"Field role with full autonomy. Includes some cold calling for new business, and prefers a technical background.",
+    url:"https://www.reed.co.uk/jobs/regional-business-development-manager/57393943" },
+  { s:"other", co:"Infrastructure engineering firm", rec:"Michael Page", type:"Civil engineering", title:"Area Sales Manager", loc:"Bristol & South West", mode:"Field", modeNote:"Defined territory", pay:"£45,000–£65,000", posted:"2026-09-16", src:"recruiter",
+    note:"Drive specification and sales with engineers, contractors and councils. Ideally wants civils or drainage experience.",
+    url:"https://www.reed.co.uk/jobs/area-sales-manager/57354955" },
+  { s:"other", co:"Environmental compliance consultancy", rec:"FindCore", type:"Water hygiene", title:"Sales Account Manager", loc:"Bristol", mode:"Office", modeNote:"Bristol office", pay:"£35,000–£40,000 + bonus", posted:"2026-10-16", src:"recruiter",
+    note:"Win new business and build lasting relationships selling Legionella and water-hygiene services.",
+    url:"https://www.reed.co.uk/jobs/sales-account-manager/57466094" },
+  { s:"other", co:"B2B media & events business", rec:"Get Recruited", type:"Events", title:"Sales Manager – Events", loc:"Central Bristol", mode:"Hybrid", modeNote:"At least 3 office days", pay:"£45,000–£50,000 + £15–20k expected commission", posted:"2026-10-22", src:"recruiter",
+    note:"Look after valuable client accounts and win new ones, selling sponsorship and exhibition space.",
+    url:"https://www.reed.co.uk/jobs/sales-manager-events/57484542" },
+  { s:"other", co:"Established industry business", rec:"Juice Recruitment", type:"B2B", title:"Key Account Executive", loc:"Radstock", mode:"Hybrid", modeNote:"Hybrid after probation", pay:"c. £28,000", posted:"2026-09-30", src:"recruiter",
+    note:"Office-based key account role near Midsomer Norton. More junior than Ben's current job.",
+    url:"https://www.reed.co.uk/jobs/key-account-executive/57407214" }
+];
+
+const SCREENED = {
+  hiring: { label:"Hiring now (roles above)", hint:"Food and drink businesses with a matching role on the board.", items:[
+    "JJ Foodservice","Froneri","Sazerac","Tiny Rebel","Carlsberg Britvic (via McCurrach)","Diageo (via CPM)","Vitamin Well Group","Monster Energy (via Advocate)","Matthew Clark Bibendum / C&C Group","Pet Drugs Online","ADM Agriculture"]},
+  none: { label:"Checked: no sales or buying roles open right now", hint:"Their vacancy pages were read directly.", items:[
+    ["Paxton & Whitfield","Christmas shop roles only","https://paxtonandwhitfield.co.uk/pages/careers"],
+    ["Essential Trading Co-op","Bristol wholesaler","https://www.essential-trading.coop/vacancies"],
+  ]},
+  manual: { label:"Worth checking by hand", hint:"Food and drink employers around Bristol whose job pages can't be read automatically. Tap one to open it.", items:[
+    ["Thatchers Cider","https://careers.thatcherscider.co.uk/"],["Yeo Valley","https://careers.yeovalley.co.uk/"],["Pieminister","https://careers.pieminister.co.uk/"],["Pukka Herbs","https://www.pukkaherbs.com/uk/en/careers"],
+    ["Clifton Coffee Roasters","https://cliftoncoffee.co.uk/pages/careers"],["Butcombe Brewery","https://careers.butcombebrewery.com/"],["Wiper and True","https://wiperandtrue.com/pages/careers-at-wiper-and-true"],["Bristol Beer Factory","https://www.bristolbeerfactory.co.uk/"],
+    ["Bath Ales / St Austell","https://www.staustellbrewery.co.uk/"],["Orchard Pig","https://orchardpig.co.uk/"],["Lilley's Cider","https://www.lilleyscider.co.uk/"],["Cotswold Fayre","https://www.cotswold-fayre.co.uk/"],
+    ["Diverse Fine Food","https://diversefinefood.co.uk/"],["Bidfood","https://www.bidfood.co.uk/careers/"],["Brakes","https://www.brakescareers.co.uk/"],["Lactalis UK","https://www.lactalis.co.uk/careers/"],
+    ["Wyke Farms","https://www.wykefarms.com/work-with-wyke"],["JJ Foodservice","https://www.jjfoodservice.com/content/careers"],
+  ]},
+};
+
+/* ---------- helpers ---------- */
+const PALETTE = ["#9A560A","#2F5D8A","#0E7C7B","#6A4C93","#B3541E","#3D6B3A","#8A3B6E","#45506B","#A0522D","#1F6F8B"];
+function hash(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))|0;return Math.abs(h)}
+function initials(n){const w=n.replace(/\([^)]*\)/g," ").replace(/&/g," ").split(/\s+/).filter(x=>x&&x!=="/");return w.length>1?(w[0][0]+w[1][0]).toUpperCase():w[0].slice(0,2).toUpperCase()}
+function days(iso){return Math.round((TODAY-new Date(iso+"T12:00:00"))/86400000)}
+function ago(iso){const d=days(iso);if(d<=0)return"Today";if(d===1)return"Yesterday";if(d<7)return d+" days ago";if(d<14)return"1 week ago";if(d<31)return Math.floor(d/7)+" weeks ago";const m=Math.round(d/30);return m+(m===1?" month ago":" months ago")}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+const key=r=>r.url;
+
+let starred=new Set();
+try{starred=new Set(JSON.parse(localStorage.getItem("bjb-stars")||"[]"))}catch(e){}
+function saveStars(){try{localStorage.setItem("bjb-stars",JSON.stringify([...starred]))}catch(e){}}
+
+const state={q:"",mode:"all",src:"all",hideOld:false,stat:null};
+try{const s=JSON.parse(localStorage.getItem("bjb-filters")||"{}");Object.assign(state,{mode:s.mode||"all",src:s.src||"all",hideOld:!!s.hideOld})}catch(e){}
+function saveFilters(){try{localStorage.setItem("bjb-filters",JSON.stringify({mode:state.mode,src:state.src,hideOld:state.hideOld}))}catch(e){}}
+
+function matches(r){
+  if(state.mode!=="all"&&r.mode!==state.mode)return false;
+  if(state.src!=="all"&&r.src!==state.src)return false;
+  if(state.hideOld&&days(r.posted)>42)return false;
+  if(state.stat==="new"&&days(r.posted)>7)return false;
+  if(state.stat==="star"&&!starred.has(key(r)))return false;
+  if(state.stat==="pay"&&!r.pay)return false;
+  if(state.q){const q=state.q.toLowerCase();const hay=[r.co,r.rec,r.type,r.title,r.loc,r.note,r.modeNote,r.pay].join(" ").toLowerCase();if(!hay.includes(q))return false}
+  return true;
+}
+
+function card(r){
+  const old=days(r.posted)>42, cd=r.closes?days(r.closes):null;
+  const name=r.co;
+  return `<article class="role${starred.has(key(r))?" starred":""}">
+    <div class="logo" style="background:${PALETTE[hash(name)%PALETTE.length]}" aria-hidden="true">${esc(initials(name))}</div>
+    <div>
+      <div class="agency"><b>${esc(r.co)}</b>${r.rec?`<span class="src">via ${esc(r.rec)}</span>`:""}<span class="type">${esc(r.type)}</span></div>
+      <div class="title"><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.title)}</a></div>
+      <div class="meta">
+        <span class="pill ${r.mode}">${r.mode==="Field"?"Field-based":r.mode==="Office"?"Office-based":r.mode==="Remote"?"Home-based":"Hybrid"}</span>
+        <span>${esc(r.loc)} · ${esc(r.modeNote)}</span>
+        ${r.pay?`<span class="money">${esc(r.pay)}</span>`:""}
+        ${r.src==="recruiter"?`<span class="pill rec">Recruiter</span>`:""}
+        ${cd===0?`<span class="pill closing">Closes today</span>`:cd!==null&&cd<0?`<span class="pill closing">Closes in ${-cd} day${cd===-1?"":"s"}</span>`:cd!==null?`<span class="pill old">Closing date passed</span>`:""}
+        ${old?`<span class="pill old">Older listing</span>`:""}
+      </div>
+      <p class="note">${esc(r.note)}</p>
+    </div>
+    <div class="side">
+      <span class="posted">Posted ${ago(r.posted)}</span>
+      <div class="btns">
+        <button type="button" class="starbtn" data-star="${esc(key(r))}" aria-pressed="${starred.has(key(r))}" aria-label="${starred.has(key(r))?"Remove from shortlist":"Add to shortlist"}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="${starred.has(key(r))?"currentColor":"none"}" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>
+        </button>
+        <a class="go" href="${esc(r.url)}" target="_blank" rel="noopener">View role</a>
+      </div>
+    </div>
+  </article>`;
+}
+
+function render(){
+  for(const s of ["food","buyer","other"]){
+    const all=ROLES.filter(r=>r.s===s);
+    const rows=all.filter(matches).sort((a,b)=>b.posted.localeCompare(a.posted));
+    document.getElementById("l-"+s).innerHTML=rows.length?rows.map(card).join(""):`<div class="empty">No roles match these filters.</div>`;
+    document.getElementById("c-"+s).textContent=rows.length===all.length?`${all.length} roles`:`${rows.length} of ${all.length} roles`;
+  }
+  const stats=[
+    {id:null,n:ROLES.length,l:"Open roles",plain:true},
+    {id:"new",n:ROLES.filter(r=>days(r.posted)<=7).length,l:"Posted this week"},
+    {id:"field",n:ROLES.filter(r=>r.mode==="Field").length,l:"Field-based roles"},
+    {id:"pay",n:ROLES.filter(r=>r.pay).length,l:"Salary stated",plain:true},
+    {id:"star",n:ROLES.filter(r=>starred.has(key(r))).length,l:"On Ben's shortlist"},
+  ];
+  document.getElementById("stats").innerHTML=stats.map(s=>`<button type="button" class="stat${s.plain?" plain":""}" data-stat="${s.id||""}" aria-pressed="${(s.id&&(state.stat===s.id||(s.id==="field"&&state.mode==="Field")))?"true":"false"}"><div class="n">${s.n}</div><div class="l">${s.l}</div></button>`).join("");
+  document.querySelectorAll("#modeSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===state.mode));
+  document.querySelectorAll("#srcSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.src===state.src));
+  document.getElementById("hideOld").checked=state.hideOld;
+}
+
+function renderScreened(){
+  const g=SCREENED;
+  const total=g.hiring.items.length+g.none.items.length+g.manual.items.length;
+  document.getElementById("screenHint").textContent=`${total} employers · tap to expand`;
+  document.getElementById("groups").innerHTML=
+    `<div class="group"><h3>${g.hiring.label} · ${g.hiring.items.length}</h3><p>${g.hiring.hint}</p><div class="chips">${g.hiring.items.map(n=>`<span class="chip">${esc(n)}</span>`).join("")}</div></div>`+
+    `<div class="group"><h3>${g.none.label} · ${g.none.items.length}</h3><p>${g.none.hint}</p><div class="chips">${g.none.items.map(([n,s,u])=>`<a class="chip" href="${esc(u)}" target="_blank" rel="noopener">${esc(n)}${s?`<small>${esc(s)}</small>`:""}</a>`).join("")}</div></div>`+
+    `<div class="group"><h3>${g.manual.label} · ${g.manual.items.length}</h3><p>${g.manual.hint}</p><div class="chips">${g.manual.items.map(([n,u])=>`<a class="chip" href="${esc(u)}" target="_blank" rel="noopener">${esc(n)}</a>`).join("")}</div></div>`;
+}
+
+document.addEventListener("click",e=>{
+  const st=e.target.closest("[data-star]");
+  if(st){const k=st.dataset.star;starred.has(k)?starred.delete(k):starred.add(k);saveStars();render();return}
+  const m=e.target.closest("#modeSeg button");
+  if(m){state.mode=m.dataset.mode;saveFilters();render();return}
+  const s=e.target.closest("#srcSeg button");
+  if(s){state.src=s.dataset.src;saveFilters();render();return}
+  const t=e.target.closest(".stat");
+  if(t){const id=t.dataset.stat;
+    if(id==="field"){state.mode=state.mode==="Field"?"all":"Field";state.stat=null;saveFilters()}
+    else if(id==="new"||id==="star"||id==="pay"){state.stat=state.stat===id?null:id}
+    else{state.stat=null;state.mode="all";state.src="all";state.q="";document.getElementById("q").value="";saveFilters()}
+    render();}
+});
+document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value.trim();render()});
+document.getElementById("hideOld").addEventListener("change",e=>{state.hideOld=e.target.checked;saveFilters();render()});
+
+render();renderScreened();
+</script>
+</body>
+</html>

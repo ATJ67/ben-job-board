@@ -1,0 +1,6 @@
+ben-job-board.html
+.DS_Store
+maintenance/pool.json
+maintenance/*.json
+maintenance/*.log
+maintenance/*.txt
